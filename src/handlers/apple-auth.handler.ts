@@ -211,19 +211,21 @@ export class AppleAuthHandler implements AuthHandlerInterface {
    */
   public async validateUserCredentials({
     authorizationCode,
+    clientNonce,
   }: {
     authorizationCode: string;
+    clientNonce?: string;
   }): Promise<AppleUserRetrievedData> {
     try {
       const tokenResponse = await this.retrieveToken(authorizationCode);
       const decodedToken = await AppleAuthHandler.decodeIdToken(
         tokenResponse.idToken
       );
-      const { iss, sub, aud, email, email_verified, is_private_email } =
+      const { iss, sub, aud, email, email_verified, is_private_email, nonce } =
         decodedToken;
 
       // Validate token properties
-      this.validateTokenProperties(iss, aud, sub, email_verified);
+      this.validateTokenProperties(iss, aud, sub, email_verified, clientNonce, nonce);
 
       return {
         aud,
@@ -243,6 +245,8 @@ export class AppleAuthHandler implements AuthHandlerInterface {
    * @param {string} iss - Issuer of the token.
    * @param {string} aud - Audience of the token.
    * @param {string} sub - Subject of the token.
+   * @param {string} nonce - Subject of the token.
+   * @param {string} clientNonce - Receive from you clients or their session.
    * @param {boolean} emailVerified - Whether the email is verified.
    * @throws {AppleAuthError} If any of the properties are invalid.
    */
@@ -250,19 +254,24 @@ export class AppleAuthHandler implements AuthHandlerInterface {
     iss: string,
     aud: string,
     sub: string,
-    emailVerified: boolean
+    emailVerified: boolean,
+    nonce?: string,
+    clientNonce?: string,
   ): void {
     if (!iss.includes(APPLE_ISS)) {
       throw new AppleAuthError('Token issuer is invalid.');
     }
     if (aud !== this.credentials.clientId) {
       throw new AppleAuthError('Token audience is invalid.');
-      }
-      if (!sub) {
+    }
+    if (!sub) {
       throw new AppleAuthError('Token subject is invalid.');
-      }
-      if (!emailVerified) {
+    }
+    if (!emailVerified) {
       throw new AppleAuthError('Email not verified.');
-      }
+    }
+    if (nonce && nonce !== clientNonce) {
+      throw new AppleAuthError('Nonce is invalid.');
+    }
   }
 }
