@@ -58,4 +58,22 @@ export class ThirdAuth {
 
     await Promise.all(clientSecretUpdatesPromise);
   }
+
+  static getAppleHandler(clientId: string): AppleAuthHandler {
+    const handler = this.appleHandlers.get(clientId);
+    if (handler) {
+      return handler;
+    }
+
+    throw new Error(`Apple handler with client ID ${clientId} not found.`);
+  }
+
+  static getGoogleHandler(clientId: string): GoogleAuthHandler {
+    const handler = this.googleHandlers.get(clientId);
+    if (handler) {
+      return handler;
+    }
+
+    throw new Error(`Google handler with client ID ${clientId} not found.`);
+  }
 }
