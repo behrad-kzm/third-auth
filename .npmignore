@@ -1,3 +1,9 @@
-src
-tsconfig.json
+.DS_Store
+.git
+.gitignore
+.npmrc
 *.log
+src/
+node_modules
+.idea
+.vscode
