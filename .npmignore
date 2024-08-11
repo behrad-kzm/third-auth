@@ -4,6 +4,9 @@
 .npmrc
 *.log
 src/
+test/
 node_modules/
 .idea
 .vscode
+tsconfig.json
+.env
