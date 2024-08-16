@@ -92,4 +92,13 @@ export class ThirdAuth {
 
     throw new Error(`Google handler with client ID ${clientId} not found.`);
   }
+
+  static getXHandler(clientId: string): XAuthHandler {
+    const handler = this.xHandlers.get(clientId);
+    if (handler) {
+      return handler;
+    }
+
+    throw new Error(`X handler with client ID ${clientId} not found.`);
+  }
 }
