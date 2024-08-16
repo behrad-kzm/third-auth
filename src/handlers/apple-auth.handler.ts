@@ -12,7 +12,6 @@ import {
   AppleSignInTokenResponse,
   AppleSignInCredentials,
   AppleUserRetrievedData,
-  AuthHandlerInterface,
 } from '../types';
 
 // Constants for URLs and Headers
@@ -29,7 +28,7 @@ class AppleAuthError extends Error {
   }
 }
 
-export class AppleAuthHandler implements AuthHandlerInterface {
+export class AppleAuthHandler {
   private readonly credentials: AppleSignInCredentials;
   private clientSecret?: string;
   private static publicKeys: JWK[] = [];
@@ -233,6 +232,8 @@ export class AppleAuthHandler implements AuthHandlerInterface {
         emailVerified: email_verified,
         isPrivateEmail: is_private_email,
         sub,
+        accessToken: tokenResponse.accessToken,
+        refreshToken: tokenResponse.refreshToken,
       };
     } catch (error) {
       console.error('Error validating user credentials:', error);

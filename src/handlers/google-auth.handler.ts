@@ -1,6 +1,5 @@
 import { OAuth2Client } from "google-auth-library";
 import {
-  AuthHandlerInterface,
   GoogleSignInCredentials,
   GoogleUserRetrievedData,
 } from "../types";
@@ -17,7 +16,7 @@ class GoogleAuthError extends Error {
 const GOOGLE_ISSUER = "accounts.google.com";
 const GOOGLE_ISSUER_ALT = "https://accounts.google.com";
 
-export class GoogleAuthHandler implements AuthHandlerInterface {
+export class GoogleAuthHandler {
   private readonly credentials: GoogleSignInCredentials;
   private services: OAuth2Client;
 

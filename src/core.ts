@@ -1,10 +1,12 @@
 import { AppleAuthHandler } from "./handlers/apple-auth.handler";
 import { GoogleAuthHandler } from "./handlers/google-auth.handler";
-import { AppleSignInCredentials, AuthHandler, AuthHandlerCredential, GoogleSignInCredentials, ThirdPartyType } from "./types";
+import { XAuthHandler } from "./handlers/x-auth.handler";
+import { AppleSignInCredentials, AuthHandler, AuthHandlerCredential, GoogleSignInCredentials, ThirdPartyType, XSignInCredentials } from "./types";
 
 export class ThirdAuth {
   private static appleHandlers: Map<string, AppleAuthHandler> = new Map();
   private static googleHandlers: Map<string, GoogleAuthHandler> = new Map();
+  private static xHandlers: Map<string, XAuthHandler> = new Map();
 
   static async apple(credential: AppleSignInCredentials): Promise<AppleAuthHandler> {
     const appleAuthHandler = new AppleAuthHandler(credential);
@@ -16,6 +18,11 @@ export class ThirdAuth {
     const googleAuthHandler = new GoogleAuthHandler(credential);
     await googleAuthHandler.initialize();
     return googleAuthHandler;
+  }
+
+  static x(credential: XSignInCredentials): XAuthHandler {
+    const xAuthHandler = new XAuthHandler(credential);
+    return xAuthHandler;
   }
 
   static async registerHandler(
@@ -41,6 +48,15 @@ export class ThirdAuth {
         }
         const handler = await this.google(credential as GoogleSignInCredentials);
         this.googleHandlers.set(clientId, handler);
+        return handler;
+      }
+      case ThirdPartyType.X: {
+        const foundHandler = this.xHandlers.get(clientId);
+        if (foundHandler) {
+          return foundHandler;
+        }
+        const handler = this.x(credential as XSignInCredentials);
+        this.xHandlers.set(clientId, handler);
         return handler;
       }
       default: {

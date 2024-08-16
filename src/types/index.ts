@@ -1,18 +1,16 @@
 import { AppleAuthHandler } from "../handlers/apple-auth.handler";
 import { GoogleAuthHandler } from "../handlers/google-auth.handler";
+import { XAuthHandler } from "../handlers/x-auth.handler";
 
 export enum ThirdPartyType {
   Apple = 'Apple',
   Google = 'Google',
+  X = 'X'
 }
 
-export type AuthHandler = AppleAuthHandler | GoogleAuthHandler;
+export type AuthHandler = AppleAuthHandler | GoogleAuthHandler | XAuthHandler;
 
-export type AuthHandlerCredential = AppleSignInCredentials | GoogleSignInCredentials;
-
-export interface AuthHandlerInterface {
-  initialize(): Promise<void>;
-}
+export type AuthHandlerCredential = AppleSignInCredentials | GoogleSignInCredentials | XSignInCredentials;
 
 export type AppleSignInCredentials = {
   privateKey: string;
@@ -31,25 +29,46 @@ export type AppleSignInTokenResponse = {
   expiresIn: string;
 }
 
-
 export type GoogleSignInCredentials = {
   clientId: string;
   clientSecret: string;
 }
 
-export type UserRetrievedData = {
-  aud: string;
+export type XSignInCredentials = {
+  clientId: string;
+  clientSecret: string;
+  redirectURI: string;
+}
+
+export type BasicUserRetrievedData = {
   sub: string;
+}
+
+export type AppleUserRetrievedData = BasicUserRetrievedData & {
+  isPrivateEmail: boolean;
+  accessToken: string;
+  refreshToken?: string;
+  aud: string;
   email: string;
   emailVerified: boolean;
 }
 
-export type AppleUserRetrievedData = UserRetrievedData & {
-  isPrivateEmail: boolean;
-}
-
-export type GoogleUserRetrievedData = UserRetrievedData & {
+export type GoogleUserRetrievedData = BasicUserRetrievedData & {
   firstName?: string;
   lastName?: string;
   avatar?: string;
+  aud: string;
+  email: string;
+  emailVerified: boolean;
+}
+
+export type XUserRetrievedData = BasicUserRetrievedData & {
+  name: string;
+  username: string;
+}
+
+export type XUserCodeExchangedData = {
+  accessToken: string;
+  refreshToken?: string;
+  scope: string;
 }

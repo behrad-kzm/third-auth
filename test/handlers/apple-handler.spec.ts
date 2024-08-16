@@ -1,4 +1,4 @@
-import { AppleAuthHandler } from '../src'
+import { AppleAuthHandler } from '../../src'
 import * as dotenv from 'dotenv';
 
 
