@@ -138,7 +138,7 @@ export class LinkedInAuthHandler {
         sub,
         raw: decodedToken,
         email,
-        emailVerified: email_verified ?? false,
+        emailVerified: email_verified == "true",
         name,
         firstName: given_name,
         lastName: family_name,
