@@ -1,6 +1,6 @@
 {
   "name": "third-auth",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "NPM server-side third party authentication library for sign in with apple, sign in with google, sign in with X (twitter) and sign in with LinkedIn in typescript",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
