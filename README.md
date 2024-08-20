@@ -1,10 +1,10 @@
 
 # ThirdAuth
 
-ThirdAuth is a simple TypeScript library to securely validate third-party authentication with Apple, Google, and X (Twitter).
+ThirdAuth is a simple TypeScript library to securely validate third-party authentication with Apple, Google, X (Twitter) and LinkedIn.
 
 ## Features
-- Supports multiple Apple, X (Twitter), and Google Sign-In handlers
+- Supports multiple Apple, LinkedIn, X (Twitter), and Google Sign-In handlers
 - Manages different accounts with client IDs
 - Periodically updates Apple client secrets
 
@@ -31,7 +31,7 @@ ThirdAuth.registerHandler({
 ```
 
 #### X (Twitter) Sign-In Handler
-Register an X (Twitter) Sign-In handler:
+Register a X (Twitter) Sign-In handler:
 
 ```typescript
 ThirdAuth.registerHandler({
@@ -39,6 +39,17 @@ ThirdAuth.registerHandler({
   clientSecret: 'config.x.clientSecret',
   redirectURI: 'config.x.redirectURI',
 }, ThirdPartyType.X);
+```
+
+#### LinkedIn Sign-In Handler
+Register a LinkedIn Sign-In handler:
+
+```typescript
+ThirdAuth.registerHandler({
+  clientId: 'config.linkedIn.clientId',
+  clientSecret: 'config.linkedIn.clientSecret',
+  redirectURI: 'config.linkedIn.redirectURI',
+}, ThirdPartyType.LinkedIn);
 ```
 
 #### Google Sign-In Handler
@@ -63,11 +74,20 @@ const payload = await ThirdAuth
 ```
 
 #### X (Twitter)
-Validate an X (Twitter) authorization code:
+Validate a X (Twitter) authorization code:
 
 ```typescript
 const payload = await ThirdAuth
   .getXHandler('config.x.clientId')
+  .validateUserCredentials({ authorizationCode: loginDto.authorizationCode });
+```
+
+#### LinkedIn
+Validate a LinkedIn authorization code:
+
+```typescript
+const payload = await ThirdAuth
+  .getLinkedInHandler('config.x.clientId')
   .validateUserCredentials({ authorizationCode: loginDto.authorizationCode });
 ```
 
@@ -88,7 +108,7 @@ await ThirdAuth.updateAppleClientSecrets();
 ```
 
 ### Multiple Apple Sign-In Handlers
-Support multiple Apple, Google and X (Twitter) accounts:
+Support multiple Apple, LinkedIn, Google and X (Twitter) accounts:
 
 ```typescript
 ThirdAuth.registerHandler({
