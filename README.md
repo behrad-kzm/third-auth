@@ -59,7 +59,7 @@ Register a Google Sign-In handler:
 ThirdAuth.registerHandler({
   clientId: 'config.google.clientId',
   clientSecret: 'config.google.clientSecret',
-}, ThirdPartyType.GOOGLE);
+}, ThirdPartyType.Google);
 ```
 
 ### Validate User Credentials
