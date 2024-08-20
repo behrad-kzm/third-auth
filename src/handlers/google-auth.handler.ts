@@ -73,6 +73,7 @@ export class GoogleAuthHandler {
       return {
         aud: payload.aud,
         sub: payload.sub,
+        raw: payload,
         email: payload.email,
         emailVerified: payload.email_verified ?? false,
         firstName: payload.given_name,

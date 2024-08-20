@@ -229,6 +229,7 @@ export class AppleAuthHandler {
       return {
         aud,
         email,
+        raw: decodedToken,
         emailVerified: email_verified,
         isPrivateEmail: is_private_email,
         sub,

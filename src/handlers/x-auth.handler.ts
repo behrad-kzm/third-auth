@@ -98,7 +98,7 @@ export class XAuthHandler {
    * @returns Promise resolving to the user's information including ID, name, and username
    * @throws XAuthError if user information retrieval fails
    */
-  private async retrieveUserInfo(accessToken: string): Promise<XUserRetrievedData> {
+  private async retrieveUserInfo(credentials: XUserCodeExchangedData): Promise<XUserRetrievedData> {
     try {
       // Make the GET request to the X API to retrieve user details
       const { data, status } = await axios.get(X_USERS_URL, {
@@ -106,7 +106,7 @@ export class XAuthHandler {
           'User-Agent': USER_AGENT,
           Accept: '*/*',
           'Accept-Encoding': 'gzip, deflate, br',
-          Authorization: `Bearer ${accessToken}`, // Bearer token authorization
+          Authorization: `Bearer ${credentials.accessToken}`, // Bearer token authorization
         },
       });
 
@@ -116,6 +116,9 @@ export class XAuthHandler {
           sub: data.data.id,   // User ID (sub)
           name: data.name,     // User's name
           username: data.username, // User's username
+          raw: data,
+          accessToken: credentials.accessToken,
+          refreshToken: credentials.refreshToken
         };
       }
 
@@ -155,7 +158,7 @@ export class XAuthHandler {
       }
 
       // Retrieve the user information using the access token
-      const userInfo = await this.retrieveUserInfo(userCredentials.accessToken);
+      const userInfo = await this.retrieveUserInfo(userCredentials);
 
       return userInfo;
 

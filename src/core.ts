@@ -1,12 +1,14 @@
 import { AppleAuthHandler } from "./handlers/apple-auth.handler";
 import { GoogleAuthHandler } from "./handlers/google-auth.handler";
+import { LinkedInAuthHandler } from "./handlers/linkedin-auth.handler";
 import { XAuthHandler } from "./handlers/x-auth.handler";
-import { AppleSignInCredentials, AuthHandler, AuthHandlerCredential, GoogleSignInCredentials, ThirdPartyType, XSignInCredentials } from "./types";
+import { AppleSignInCredentials, AuthHandler, AuthHandlerCredential, GoogleSignInCredentials, LinkedInSignInCredentials, ThirdPartyType, XSignInCredentials } from "./types";
 
 export class ThirdAuth {
   private static appleHandlers: Map<string, AppleAuthHandler> = new Map();
   private static googleHandlers: Map<string, GoogleAuthHandler> = new Map();
   private static xHandlers: Map<string, XAuthHandler> = new Map();
+  private static linkedInHandlers: Map<string, LinkedInAuthHandler> = new Map();
 
   static async apple(credential: AppleSignInCredentials): Promise<AppleAuthHandler> {
     const appleAuthHandler = new AppleAuthHandler(credential);
@@ -59,6 +61,15 @@ export class ThirdAuth {
         this.xHandlers.set(clientId, handler);
         return handler;
       }
+      case ThirdPartyType.LinkedIn: {
+        const foundHandler = this.linkedInHandlers.get(clientId);
+        if (foundHandler) {
+          return foundHandler;
+        }
+        const handler = new LinkedInAuthHandler(credential as LinkedInSignInCredentials);
+        this.linkedInHandlers.set(clientId, handler);
+        return handler;
+      }
       default: {
         const exhaustiveCheck: never = thirdPartyType;
         throw new Error(`${exhaustiveCheck} not implemented.`)
@@ -100,5 +111,14 @@ export class ThirdAuth {
     }
 
     throw new Error(`X handler with client ID ${clientId} not found.`);
+  }
+
+  static getLinkedInHandler(clientId: string): LinkedInAuthHandler {
+    const handler = this.linkedInHandlers.get(clientId);
+    if (handler) {
+      return handler;
+    }
+
+    throw new Error(`LinkedIn handler with client ID ${clientId} not found.`);
   }
 }

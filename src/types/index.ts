@@ -1,25 +1,52 @@
 import { AppleAuthHandler } from "../handlers/apple-auth.handler";
 import { GoogleAuthHandler } from "../handlers/google-auth.handler";
 import { XAuthHandler } from "../handlers/x-auth.handler";
+import { LinkedInAuthHandler } from "../handlers/linkedin-auth.handler";
+
+// Auth Handler
+export type AuthHandler = 
+AppleAuthHandler | 
+GoogleAuthHandler | 
+XAuthHandler |
+LinkedInAuthHandler;
+
+export type AuthHandlerCredential = AppleSignInCredentials | GoogleSignInCredentials | XSignInCredentials | LinkedInSignInCredentials;
+
+export type BasicUserAuthRetrievedData = {
+  sub: string;
+  raw: any;
+}
 
 export enum ThirdPartyType {
   Apple = 'Apple',
   Google = 'Google',
-  X = 'X'
+  X = 'X',
+  LinkedIn = 'LinkedIn',
 }
 
-export type AuthHandler = AppleAuthHandler | GoogleAuthHandler | XAuthHandler;
+// Google
+export type GoogleSignInCredentials = {
+  clientId: string;
+  clientSecret: string;
+}
 
-export type AuthHandlerCredential = AppleSignInCredentials | GoogleSignInCredentials | XSignInCredentials;
+export type GoogleUserRetrievedData = BasicUserAuthRetrievedData & {
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
+  aud: string;
+  email: string;
+  emailVerified: boolean;
+}
 
+
+// Apple
 export type AppleSignInCredentials = {
   privateKey: string;
   teamId: string;
   keyId: string;
   clientId: string;
 }
-
-
 
 export type AppleSignInTokenResponse = {
   idToken: string;
@@ -29,22 +56,7 @@ export type AppleSignInTokenResponse = {
   expiresIn: string;
 }
 
-export type GoogleSignInCredentials = {
-  clientId: string;
-  clientSecret: string;
-}
-
-export type XSignInCredentials = {
-  clientId: string;
-  clientSecret: string;
-  redirectURI: string;
-}
-
-export type BasicUserRetrievedData = {
-  sub: string;
-}
-
-export type AppleUserRetrievedData = BasicUserRetrievedData & {
+export type AppleUserRetrievedData = BasicUserAuthRetrievedData & {
   isPrivateEmail: boolean;
   accessToken: string;
   refreshToken?: string;
@@ -53,22 +65,51 @@ export type AppleUserRetrievedData = BasicUserRetrievedData & {
   emailVerified: boolean;
 }
 
-export type GoogleUserRetrievedData = BasicUserRetrievedData & {
-  firstName?: string;
-  lastName?: string;
-  avatar?: string;
-  aud: string;
-  email: string;
-  emailVerified: boolean;
-}
 
-export type XUserRetrievedData = BasicUserRetrievedData & {
+// X
+export type XUserRetrievedData = BasicUserAuthRetrievedData & {
   name: string;
   username: string;
+  accessToken: string;
+  refreshToken?: string;
 }
 
 export type XUserCodeExchangedData = {
   accessToken: string;
   refreshToken?: string;
   scope: string;
+}
+
+export type XSignInCredentials = {
+  clientId: string;
+  clientSecret: string;
+  redirectURI: string;
+}
+
+
+// LinkedIn
+export type LinkedInSignInCredentials = {
+  clientId: string;
+  clientSecret: string;
+  redirectURI: string;
+}
+
+export type LinkedInUserCodeExchangedData = {
+  accessToken: string;
+  refreshToken?: string;
+  scope: string;
+  idToken: string;
+  tokenType: string;
+  refreshTokenExpiresIn?: number;
+  expiresIn: number;
+}
+
+export type LinkedInUserRetrievedData = BasicUserAuthRetrievedData & {
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
+  email?: string;
+  emailVerified?: boolean;
+  accessToken: string;
 }
