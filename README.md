@@ -87,7 +87,7 @@ Validate a LinkedIn authorization code:
 
 ```typescript
 const payload = await ThirdAuth
-  .getLinkedInHandler('config.x.clientId')
+  .getLinkedInHandler('config.linkedIn.clientId')
   .validateUserCredentials({ authorizationCode: loginDto.authorizationCode });
 ```
 
