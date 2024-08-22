@@ -2,13 +2,15 @@ import { AppleAuthHandler } from "../handlers/apple-auth.handler";
 import { GoogleAuthHandler } from "../handlers/google-auth.handler";
 import { XAuthHandler } from "../handlers/x-auth.handler";
 import { LinkedInAuthHandler } from "../handlers/linkedin-auth.handler";
+import { SnapChatAuthHandler } from "../handlers/snapchat-auth.handler";
 
 // Auth Handler
 export type AuthHandler = 
 AppleAuthHandler | 
 GoogleAuthHandler | 
 XAuthHandler |
-LinkedInAuthHandler;
+LinkedInAuthHandler |
+SnapChatAuthHandler;
 
 export type AuthHandlerCredential = AppleSignInCredentials | GoogleSignInCredentials | XSignInCredentials | LinkedInSignInCredentials;
 
@@ -22,6 +24,7 @@ export enum ThirdPartyType {
   Google = 'Google',
   X = 'X',
   LinkedIn = 'LinkedIn',
+  SnapChat = 'SnapChat'
 }
 
 // Google
@@ -112,4 +115,26 @@ export type LinkedInUserRetrievedData = BasicUserAuthRetrievedData & {
   email?: string;
   emailVerified?: boolean;
   accessToken: string;
+}
+
+export type SnapChatSignInCredentials = {
+  clientId: string;
+  clientSecret: string;
+  redirectURI: string;
+}
+
+export type SnapChatUserCodeExchangedData = {
+  accessToken: string;
+  refreshToken: string;
+  scope: string;
+  tokenType: string;
+  expiresIn: number;
+}
+
+export type SnapChatUserRetrievedData = BasicUserAuthRetrievedData & {
+  avatar: string;
+  displayName: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
 }

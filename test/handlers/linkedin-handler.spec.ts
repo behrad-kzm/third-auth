@@ -5,21 +5,21 @@ import { LinkedInAuthHandler } from '../../src/handlers/linkedin-auth.handler';
 jest.setTimeout(60000);
 describe('linkedinHandler', () => {
 
-  let xClientId: string;
-  let xClientSecret: string;
+  let linkedInClientId: string;
+  let linkedInClientSecret: string;
   let authorizationCode: string;;
 
   beforeAll(() => {
     dotenv.config({ path: '.env' });
-    xClientId = process.env.LINKED_IN_CLIENT_ID as string;
-    xClientSecret = process.env.LINKED_IN_CLIENT_SECRET as string;
-    authorizationCode = process.env.X_AUTHORIZATION_CODE as string;
+    linkedInClientId = process.env.LINKED_IN_CLIENT_ID as string;
+    linkedInClientSecret = process.env.LINKED_IN_CLIENT_SECRET as string;
+    authorizationCode = process.env.LINKED_IN_AUTHORIZATION_CODE as string;
   });
 
-  it('validate user with x handler properly', async () => {
+  it('validate user with LinkedIn handler properly', async () => {
       const handler = new LinkedInAuthHandler({
-        clientId: xClientId,
-        clientSecret: xClientSecret,
+        clientId: linkedInClientId,
+        clientSecret: linkedInClientSecret,
         redirectURI: 'http://localhost:3000/callback'
       });
 

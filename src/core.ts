@@ -1,31 +1,16 @@
 import { AppleAuthHandler } from "./handlers/apple-auth.handler";
 import { GoogleAuthHandler } from "./handlers/google-auth.handler";
 import { LinkedInAuthHandler } from "./handlers/linkedin-auth.handler";
+import { SnapChatAuthHandler } from "./handlers/snapchat-auth.handler";
 import { XAuthHandler } from "./handlers/x-auth.handler";
-import { AppleSignInCredentials, AuthHandler, AuthHandlerCredential, GoogleSignInCredentials, LinkedInSignInCredentials, ThirdPartyType, XSignInCredentials } from "./types";
+import { AppleSignInCredentials, AuthHandler, AuthHandlerCredential, GoogleSignInCredentials, LinkedInSignInCredentials, SnapChatSignInCredentials, ThirdPartyType, XSignInCredentials } from "./types";
 
 export class ThirdAuth {
   private static appleHandlers: Map<string, AppleAuthHandler> = new Map();
   private static googleHandlers: Map<string, GoogleAuthHandler> = new Map();
   private static xHandlers: Map<string, XAuthHandler> = new Map();
   private static linkedInHandlers: Map<string, LinkedInAuthHandler> = new Map();
-
-  static async apple(credential: AppleSignInCredentials): Promise<AppleAuthHandler> {
-    const appleAuthHandler = new AppleAuthHandler(credential);
-    await appleAuthHandler.initialize();
-    return appleAuthHandler;
-  }
-
-  static async google(credential: GoogleSignInCredentials): Promise<GoogleAuthHandler> {
-    const googleAuthHandler = new GoogleAuthHandler(credential);
-    await googleAuthHandler.initialize();
-    return googleAuthHandler;
-  }
-
-  static x(credential: XSignInCredentials): XAuthHandler {
-    const xAuthHandler = new XAuthHandler(credential);
-    return xAuthHandler;
-  }
+  private static snapChatHandlers: Map<string, SnapChatAuthHandler> = new Map();
 
   static async registerHandler(
     credential: AuthHandlerCredential,
@@ -39,7 +24,8 @@ export class ThirdAuth {
         if (foundHandler) {
           return foundHandler;
         }
-        const handler = await this.apple(credential as AppleSignInCredentials);
+        const handler = new AppleAuthHandler(credential as AppleSignInCredentials);
+        await handler.initialize();
         this.appleHandlers.set(clientId, handler);
         return handler;
       }
@@ -48,7 +34,8 @@ export class ThirdAuth {
         if (foundHandler) {
           return foundHandler;
         }
-        const handler = await this.google(credential as GoogleSignInCredentials);
+        const handler = new GoogleAuthHandler(credential as GoogleSignInCredentials);
+        await handler.initialize();
         this.googleHandlers.set(clientId, handler);
         return handler;
       }
@@ -57,7 +44,7 @@ export class ThirdAuth {
         if (foundHandler) {
           return foundHandler;
         }
-        const handler = this.x(credential as XSignInCredentials);
+        const handler = new XAuthHandler(credential as XSignInCredentials);
         this.xHandlers.set(clientId, handler);
         return handler;
       }
@@ -68,6 +55,15 @@ export class ThirdAuth {
         }
         const handler = new LinkedInAuthHandler(credential as LinkedInSignInCredentials);
         this.linkedInHandlers.set(clientId, handler);
+        return handler;
+      }
+      case ThirdPartyType.SnapChat: {
+        const foundHandler = this.snapChatHandlers.get(clientId);
+        if (foundHandler) {
+          return foundHandler;
+        }
+        const handler = new SnapChatAuthHandler(credential as SnapChatSignInCredentials);
+        this.snapChatHandlers.set(clientId, handler);
         return handler;
       }
       default: {
@@ -120,5 +116,14 @@ export class ThirdAuth {
     }
 
     throw new Error(`LinkedIn handler with client ID ${clientId} not found.`);
+  }
+
+  static getSnapChatHandler(clientId: string): SnapChatAuthHandler {
+    const handler = this.snapChatHandlers.get(clientId);
+    if (handler) {
+      return handler;
+    }
+
+    throw new Error(`SnapChat handler with client ID ${clientId} not found.`);
   }
 }

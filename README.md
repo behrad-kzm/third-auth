@@ -1,10 +1,10 @@
 
 # ThirdAuth
 
-ThirdAuth is a simple TypeScript library to securely validate third-party authentication with Apple, Google, X (Twitter) and LinkedIn.
+ThirdAuth is a simple TypeScript library to securely validate third-party authentication with Apple, Google, X (Twitter), SnapChat and LinkedIn.
 
 ## Features
-- Supports multiple Apple, LinkedIn, X (Twitter), and Google Sign-In handlers
+- Supports multiple Apple, LinkedIn, X (Twitter), SnapChat and Google Sign-In handlers
 - Manages different accounts with client IDs
 - Periodically updates Apple client secrets
 
@@ -52,6 +52,17 @@ ThirdAuth.registerHandler({
 }, ThirdPartyType.LinkedIn);
 ```
 
+#### SnapChat Sign-In Handler
+Register a SnapChat Sign-In handler:
+
+```typescript
+ThirdAuth.registerHandler({
+  clientId: 'config.snapChat.clientId',
+  clientSecret: 'config.snapChat.clientSecret',
+  redirectURI: 'config.snapChat.redirectURI',
+}, ThirdPartyType.SnapChat);
+```
+
 #### Google Sign-In Handler
 Register a Google Sign-In handler:
 
@@ -88,6 +99,15 @@ Validate a LinkedIn authorization code:
 ```typescript
 const payload = await ThirdAuth
   .getLinkedInHandler('config.linkedIn.clientId')
+  .validateUserCredentials({ authorizationCode: loginDto.authorizationCode });
+```
+
+#### SnapChat
+Validate a SnapChat authorization code:
+
+```typescript
+const payload = await ThirdAuth
+  .getSnapChatHandler('config.snapChat.clientId')
   .validateUserCredentials({ authorizationCode: loginDto.authorizationCode });
 ```
 
