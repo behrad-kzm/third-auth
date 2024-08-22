@@ -1,12 +1,12 @@
-.DS_Store
+src/
+test/
+node_modules/
+tsconfig.json
 .git
 .gitignore
 .npmrc
 *.log
-src/
-test/
-node_modules/
 .idea
 .vscode
-tsconfig.json
+.DS_Store
 .env
