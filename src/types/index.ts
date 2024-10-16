@@ -60,12 +60,12 @@ export type AppleSignInTokenResponse = {
 }
 
 export type AppleUserRetrievedData = BasicUserAuthRetrievedData & {
-  isPrivateEmail: boolean;
+  isPrivateEmail?: boolean;
   accessToken: string;
   refreshToken?: string;
   aud: string;
-  email: string;
-  emailVerified: boolean;
+  email?: string;
+  emailVerified?: boolean;
 }
 
 
