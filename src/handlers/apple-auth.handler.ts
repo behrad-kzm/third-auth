@@ -224,7 +224,7 @@ export class AppleAuthHandler {
         decodedToken;
 
       // Validate token properties
-      this.validateTokenProperties(iss, aud, sub, email_verified, clientNonce, nonce);
+      this.validateTokenProperties(iss, aud, sub, clientNonce, nonce);
 
       return {
         aud,
@@ -256,7 +256,6 @@ export class AppleAuthHandler {
     iss: string,
     aud: string,
     sub: string,
-    emailVerified: boolean,
     nonce?: string,
     clientNonce?: string,
   ): void {
@@ -268,9 +267,6 @@ export class AppleAuthHandler {
     }
     if (!sub) {
       throw new AppleAuthError('Token subject is invalid.');
-    }
-    if (!emailVerified) {
-      throw new AppleAuthError('Email not verified.');
     }
     if (nonce && nonce !== clientNonce) {
       throw new AppleAuthError('Nonce is invalid.');
